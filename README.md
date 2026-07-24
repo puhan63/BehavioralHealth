@@ -18,11 +18,11 @@ The final output supports two levels of analysis:
 
 > **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
 
->### Key Questions This Project Answers:
+### Key Questions This Project Answers:
 
-> * What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
-> * Are claims processing correctly? Do medical and pharmacy denial, approval, and reversal rates align with normal expectations?
-> * Where is the highest risk? Which specific counties and risk categories hold the highest concentration of high-cost or high-need members?
-> * How do provider costs compare? How do different specialties and facilities stack up regarding claim volumes, total spending, and behavioral health focus?
-> * Why are claims getting rejected? What is the main culprit behind rejections—enrollment gaps, missing provider data, or bad codes?
-> * What do pharmacy patterns look like? How does psychiatric medication use—including drug types, supply lengths, and costs—change based on a member's risk score?
+* What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
+* Are claims processing correctly? Do medical and pharmacy denial, approval, and reversal rates align with normal expectations?
+* Where is the highest risk? Which specific counties and risk categories hold the highest concentration of high-cost or high-need members?
+* How do provider costs compare? How do different specialties and facilities stack up regarding claim volumes, total spending, and behavioral health focus?
+* Why are claims getting rejected? What is the main culprit behind rejections—enrollment gaps, missing provider data, or bad codes?
+* What do pharmacy patterns look like? How does psychiatric medication use—including drug types, supply lengths, and costs—change based on a member's risk score?
