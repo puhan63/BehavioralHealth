@@ -17,9 +17,9 @@ The final output supports two levels of analysis:
 ```
 
 > **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
->
+
 >### Key Questions This Project Answers:
->
+
 > * What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
 > * Are claims processing correctly? Do medical and pharmacy denial, approval, and reversal rates align with normal expectations?
 > * Where is the highest risk? Which specific counties and risk categories hold the highest concentration of high-cost or high-need members?
