@@ -1,1 +1,19 @@
-# BehavioralHealth
+# Behavioral Health Claims Utilization & Risk Analytics (SQL ETL & Tableau Project)
+
+### Quick Summary
+
+*  Built a SQL-based ETL pipeline processing 35,000+ behavioral health and pharmacy claims
+*  Designed member-level and provider-level analytical data martsCleaned, standardized, and validated highly inconsistent healthcare datasets
+*  Implemented enrollment-window validation and strict data integrity checksResolved complex edge cases including risk score handling and pharmacy status anomalies
+*  Built Tableau-ready datasets for utilization, risk, and provider performance analysis
+
+This project focuses on building a production-style SQL analytics pipeline that transforms raw, messy behavioral health data into clean, business-ready insights. Using synthetic claims, enrollment files, and provider records, the pipeline uncovers trends in member risk, diagnosis patterns, and pharmacy usage across a health plan's population. Ultimately, it converts highly inconsistent source data into validated, Tableau-ready datasets built to drive real-world healthcare decision-making.
+
+The final output supports two levels of analysis:
+
+```
+    •	Population-level trends (member risk, diagnosis mix, and utilization across counties)  
+    •	Provider-level behavior (specialty, facility type, and utilization/cost patterns by provider) 
+```
+
+> **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
