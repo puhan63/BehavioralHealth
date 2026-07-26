@@ -383,7 +383,7 @@ tableau_medical_claims
 
 ### Pharmacy Utilization & Cost Analysis
 
-![]()
+![Pharmacy Utilization & Cost Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Utilization%20%26%20Cost%20Analysis.png)
 
 This dashboard explores prescription drug utilization, cost, and days-supply patterns across drug categories and member risk tiers.
 
