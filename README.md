@@ -307,5 +307,9 @@ SELECT
     (SELECT COUNT(*) FROM medical_claims_clean),
     (SELECT COUNT(*) FROM rejected_records WHERE record_type = 'medical_claim');
 ```
+### Behavioral Health Executive Overview (Executive View)
 
+Behavioral Health Dashboard
+
+![Behavioral Health Executive Overview](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthExecutiveOverview?publish=yes)
 
