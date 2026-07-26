@@ -339,6 +339,28 @@ tableau_medical_claims
 
 This dashboard explores diagnosis mix, risk tier, age band, and geographic variation in behavioral health utilization across counties.
 
+tableau_medical_claims
+
+		 •	5,859 rows (one row per validated medical claim)
+
+			Contains:
+
+			•	Member age, age band, gender, county
+			•	Risk score and risk tier
+			•	Diagnosis category
+			•	Service date, service year/month
+
+			Used for:
+
+			•	Population segmentation by risk and demographics
+			•	County-level utilization comparisons
+			•	Diagnosis mix trends over time
+			•	Identifying where high-risk members are concentrated
+
+### Provider Performance & Care Delivery Analysis
+![Provider Performance & Care Delivery Analysis]()
+
+
 
 
 
