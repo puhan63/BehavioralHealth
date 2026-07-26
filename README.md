@@ -406,6 +406,15 @@ tableau_pharmacy_claims
 			•	Risk tier vs. pharmacy spend comparisons
 			•	Claim status patterns in pharmacy data
 
+### Key Findings (High-Level Insights)
+
+### Tableau Dashboards
+
+### Tools & Techniques
+
+### Why This Project Matters
+
+### Future Enhancements
 
 
 
