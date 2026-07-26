@@ -222,4 +222,20 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 
 ![Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
 
+### Data Overview
+
+The project uses four synthetic behavioral health datasets:
+
+* Member enrollment and demographic records (~1,000 records)
+* Provider reference data — specialty, facility type, and location (~200 records)
+* Medical claims with diagnosis, cost, and place of service (~20,000 records)
+* Pharmacy claims with drug, cost, and utilization detail (~15,000 records)
+
+All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
+### Key SQL Techniques
+
+The complete SQL ETL pipeline can be viewed here:
+
+➡️ **[Full SQL Pipeline]()**
 
