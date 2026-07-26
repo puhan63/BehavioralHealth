@@ -198,7 +198,7 @@ Average gap: **~277 days** before enrollment started.
 
 ### Repository Contents:
 
-📄 Full SQL ETL Pipeline: `Behavioral_Health_ETL.sql`
+📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
 
 🔍 Data Quality & Root-Cause Analysis: `Behavioral_Health_Data_Quality_Analysis.sql`
 
@@ -237,5 +237,5 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 
 The complete SQL ETL pipeline can be viewed here:
 
-➡️ **[Full SQL Pipeline]()**
+➡️ **[Full SQL Pipeline](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
 
