@@ -220,6 +220,6 @@ This project includes a multi-dashboard Tableau solution consisting of a landing
 
 ### Dashboard Navigation:
 
-![Landing Page]()
+![Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
 
 
