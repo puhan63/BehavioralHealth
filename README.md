@@ -239,3 +239,73 @@ The complete SQL ETL pipeline can be viewed here:
 
 ➡️ **[Full SQL Pipeline](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
 
+**1. Anti-join validation pattern (`NOT EXISTS`)**
+
+Validation and cleaning are kept decoupled — a record fails validation once, and every downstream query simply excludes anything logged in `rejected_records`, without ever deleting the raw or staged data:
+
+```sql
+WHERE NOT EXISTS (
+    SELECT 1 FROM rejected_records r
+    WHERE r.record_type = 'medical_claim'
+      AND r.record_id = stage_medical.claim_id
+)
+```
+
+**2. Referential integrity via `LEFT JOIN` + `IS NULL`**
+
+Every claim is checked against the cleaned member and provider tables to catch orphaned foreign keys before they reach the analytics layer:
+
+```sql
+FROM stage_medical m
+LEFT JOIN members_clean c
+       ON UPPER(TRIM(m.member_id)) = c.member_id
+WHERE c.member_id IS NULL
+```
+
+**3. Fuzzy standardization with layered `CASE` / `LIKE`**
+
+Misspellings and formatting variants are collapsed into a single canonical value — used for both county names and drug names:
+
+```sql
+CASE
+    WHEN UPPER(TRIM(county)) LIKE '%MILWAUKEE%'
+         OR UPPER(TRIM(county)) LIKE '%MILWAUKE%'
+        THEN 'MILWAUKEE'
+    WHEN UPPER(TRIM(county)) LIKE '%RACINE%'
+         OR UPPER(TRIM(county)) LIKE '%RACIN%'
+         OR UPPER(TRIM(county)) LIKE '%RASINE%'
+        THEN 'RACINE'
+    ELSE 'UNKNOWN'
+END AS county
+```
+
+**4. Load-time NULL handling with session variables**
+
+Blank numeric values from the raw CSV are explicitly converted to `NULL` at load time rather than being silently coerced to `0` — a fix directly tied to a real data quality bug found during validation (see *Data Quality Investigations* above):
+
+```sql
+LOAD DATA LOCAL INFILE '...'
+INTO TABLE raw_members
+...
+(member_id, dob, gender, county, enrollment_start, enrollment_end, @risk_score)
+SET risk_score = NULLIF(TRIM(@risk_score), '');
+```
+
+**5. Full audit trail via metadata tables**
+
+Two lightweight tables give the pipeline a complete data-quality audit trail without adding complexity to the transformation logic itself:
+
+- `rejected_records` — row-level log of every record that failed validation, with a specific rejection reason
+- `etl_audit_log` — aggregate row counts before/after cleaning at each stage, for quick reconciliation
+
+```sql
+INSERT INTO etl_audit_log (process_step, source_table, rows_before, rows_after, rows_removed)
+SELECT
+    'medical_claim_clean_load',
+    'medical_claims_clean',
+    (SELECT COUNT(*) FROM stage_medical),
+    (SELECT COUNT(*) FROM medical_claims_clean),
+    (SELECT COUNT(*) FROM rejected_records WHERE record_type = 'medical_claim');
+```
+
+
