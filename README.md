@@ -358,8 +358,53 @@ tableau_medical_claims
 			•	Identifying where high-risk members are concentrated
 
 ### Provider Performance & Care Delivery Analysis
-![Provider Performance & Care Delivery Analysis]()
 
+![Provider Performance & Care Delivery Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Performance%20%26%20Care%20Delivery%20Analysis.png)
+
+This dashboard explores claim volume, cost, and utilization patterns across provider specialties, domains, and facility types.
+
+tableau_medical_claims
+
+		 •	5,859 rows (one row per validated medical claim)
+
+			Contains:
+
+			•	Provider specialty and provider domain
+			•	Facility type
+			•	Claim status and place of service
+			•	Allowed amount and cost tier
+
+			Used for:
+
+			•	Provider- and specialty-level cost comparisons
+			•	Facility type utilization analysis
+			•	Claim status patterns by provider domain
+			•	Identifying high-cost or high-volume care settings
+
+### Pharmacy Utilization & Cost Analysis
+
+![]()
+
+This dashboard explores prescription drug utilization, cost, and days-supply patterns across drug categories and member risk tiers.
+
+tableau_pharmacy_claims
+
+		 •	4,435 rows (one row per validated pharmacy claim)
+
+			Contains:
+
+			•	Member risk score and risk tier
+			•	Drug name and drug category
+			•	Days supply and days-supply band
+			•	Quantity and quantity band
+			•	Claim status and cost tier
+
+			Used for:
+
+			•	Medication utilization by drug category
+			•	Cost and days-supply trend analysis
+			•	Risk tier vs. pharmacy spend comparisons
+			•	Claim status patterns in pharmacy data
 
 
 
