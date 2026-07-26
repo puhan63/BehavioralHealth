@@ -196,13 +196,30 @@ Average gap: **~277 days** before enrollment started.
 > **Note:** Figures in this section come from a separate run of the investigative analysis script and may differ slightly from the headline counts in *Pipeline Results* above (e.g., due to re-generated synthetic source data between runs). The value of this section is in the *patterns and decisions* it documents, not in reconciling exact totals across runs.
 
 
-### Repository Contents
+### Repository Contents:
 
 📄 Full SQL ETL Pipeline: `Behavioral_Health_ETL.sql`
+
 🔍 Data Quality & Root-Cause Analysis: `Behavioral_Health_Data_Quality_Analysis.sql`
+
 📁 Cleaned Analytical Data Marts: `tableau_medical_claims`, `tableau_pharmacy_claims`
+
 📘 Data Documentation: this README
+
 🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
+
 📊 Tableau Dashboard: not yet published
+
+### Interactive Tableau Dashboards:
+
+This project includes a multi-dashboard Tableau solution consisting of a landing page and four analytical dashboards. The dashboards allow users to explore behavioral health claims utilization patterns at both the population and provider levels.
+
+### View Interactive Tableau Dashboard:
+
+[Behavioral Health Claims Analytics Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)
+
+### Dashboard Navigation:
+
+![Landing Page]()
 
 
