@@ -309,8 +309,6 @@ SELECT
 ```
 ### Behavioral Health Executive Overview (Executive View)
 
-Behavioral Health Dashboard
-
 ![Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
 
 This dashboard explores overall claim volume, cost, and member risk profile, along with diagnosis-level spend and monthly claims trends across the member population.
@@ -334,4 +332,14 @@ tableau_medical_claims
 			•	Risk score vs. cost analysis
             •	Diagnosis-level cost breakdown
 			•	Monthly claims trend tracking
+
+### Behavioral Health Utilization & Population Analysis
+
+![Behavioral Health Utilization & Population Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Utilization%20%26%20Population%20Analysis.png)
+
+This dashboard explores diagnosis mix, risk tier, age band, and geographic variation in behavioral health utilization across counties.
+
+
+
+
 
