@@ -313,3 +313,25 @@ Behavioral Health Dashboard
 
 ![Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
 
+This dashboard explores overall claim volume, cost, and member risk profile, along with diagnosis-level spend and monthly claims trends across the member population.
+
+tableau_medical_claims
+
+		 •	5,859 rows (one row per validated medical claim)
+
+			Contains:
+
+			•	Member risk score and risk tier
+            •	Diagnosis category
+			•	Claim status, place of service, length of stay
+            •	Allowed amount and cost tier
+			•	Provider specialty and domain
+			
+
+			Used for:
+
+            •	Executive KPI summary
+			•	Risk score vs. cost analysis
+            •	Diagnosis-level cost breakdown
+			•	Monthly claims trend tracking
+
