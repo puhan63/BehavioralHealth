@@ -18,6 +18,11 @@ The final output supports two levels of analysis:
 
 > **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
 
+### Tech Stack
+
+- **SQL (MySQL)** — all ETL logic, validation rules, and transformations
+- **Tableau (Tableau Public)** — landing page and four analytical dashboards built on the final analytics tables
+
 ### Data Overview
 
 The project uses four synthetic behavioral health datasets:
@@ -28,6 +33,17 @@ The project uses four synthetic behavioral health datasets:
 * Pharmacy claims with drug, cost, and utilization detail (~15,000 records)
 
 All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
+### Why This Project Matters
+
+This project reflects a real-world healthcare analytics workflow:
+
+	- Raw claims and enrollment data is messy and inconsistent
+	- Enrollment-window and referential integrity checks are required before analysis
+	- Data quality issues must be tracked and resolved, not silently dropped
+	- Both population-level and provider-level views are necessary for meaningful insight
+
+The result is a structured, validated analytics pipeline that mirrors how healthcare claims data is prepared in production BI environments.
 
 ### Key Questions This Project Answers:
 
@@ -205,21 +221,6 @@ Average gap: **~277 days** before enrollment started.
 **Outcome:** Consistent geographic grouping in the final Tableau-ready datasets.
 
 > **Note:** Figures in this section come from a separate run of the investigative analysis script and may differ slightly from the headline counts in *Pipeline Results* above (e.g., due to re-generated synthetic source data between runs). The value of this section is in the *patterns and decisions* it documents, not in reconciling exact totals across runs.
-
-
-### Repository Contents:
-
-📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
-
-🔍 Data Quality & Root-Cause Analysis: `Behavioral_Health_Data_Quality_Analysis.sql`
-
-📁 Cleaned Analytical Data Marts: `tableau_medical_claims`, `tableau_pharmacy_claims`
-
-📘 Data Documentation: this README
-
-🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
-
-📊 Tableau Dashboard: not yet published
 
 ### Key SQL Techniques
 
@@ -434,15 +435,24 @@ tableau_pharmacy_claims
 **Pharmacy Utilization & Cost**
 - Monthly pharmacy cost is mostly stable ($10K–17K) but includes a sharp one-month spike to $21,053 — worth flagging as an anomaly to investigate further (data issue vs. genuine utilization spike).
 
-
-### Tableau Dashboards
-
-### Tools & Techniques
-
-### Why This Project Matters
-
 ### Future Enhancements
 
+	- Predictive modeling for high-risk member identification
+	- Time-series forecasting for behavioral health utilization and cost trends
+	- County-level geographic expansion beyond current coverage
+	- Integration of socioeconomic and social determinants of health data
+	- Anomaly detection for unusual claims patterns (e.g., the pharmacy cost spike identified in this analysis)
 
+### Repository Contents:
 
+📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
 
+🔍 Data Quality & Root-Cause Analysis: `Behavioral_Health_Data_Quality_Analysis.sql`
+
+📁 Cleaned Analytical Data Marts: `tableau_medical_claims`, `tableau_pharmacy_claims`
+
+📘 Data Documentation: this README
+
+🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
+
+📊 Tableau Dashboard: not yet published
