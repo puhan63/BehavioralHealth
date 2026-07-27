@@ -436,13 +436,12 @@ tableau_pharmacy_claims
 - Monthly pharmacy cost is mostly stable ($10K–17K) but includes a sharp one-month spike to $21,053 — worth flagging as an anomaly to investigate further (data issue vs. genuine utilization spike).
 
 ### Future Enhancements
-
 	- Predictive modeling for high-risk member identification
 	- Time-series forecasting for behavioral health utilization and cost trends
 	- County-level geographic expansion beyond current coverage
 	- Integration of socioeconomic and social determinants of health data
 	- Anomaly detection for unusual claims patterns (e.g., the pharmacy cost spike identified in this analysis)
-
+	
 ### Repository Contents:
 
 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
