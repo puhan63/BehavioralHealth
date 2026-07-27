@@ -18,6 +18,17 @@ The final output supports two levels of analysis:
 
 > **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
 
+### Data Overview
+
+The project uses four synthetic behavioral health datasets:
+
+* Member enrollment and demographic records (~1,000 records)
+* Provider reference data — specialty, facility type, and location (~200 records)
+* Medical claims with diagnosis, cost, and place of service (~20,000 records)
+* Pharmacy claims with drug, cost, and utilization detail (~15,000 records)
+
+All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
+
 ### Key Questions This Project Answers:
 
 * What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
@@ -210,29 +221,6 @@ Average gap: **~277 days** before enrollment started.
 
 📊 Tableau Dashboard: not yet published
 
-### Interactive Tableau Dashboards:
-
-This project includes a multi-dashboard Tableau solution consisting of a landing page and four analytical dashboards. The dashboards allow users to explore behavioral health claims utilization patterns at both the population and provider levels.
-
-### View Interactive Tableau Dashboard:
-
-[Behavioral Health Claims Analytics Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)
-
-### Dashboard Navigation:
-
-![Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
-
-### Data Overview
-
-The project uses four synthetic behavioral health datasets:
-
-* Member enrollment and demographic records (~1,000 records)
-* Provider reference data — specialty, facility type, and location (~200 records)
-* Medical claims with diagnosis, cost, and place of service (~20,000 records)
-* Pharmacy claims with drug, cost, and utilization detail (~15,000 records)
-
-All data was processed in a SQL-based ETL pipeline built from raw ingestion to final analytical marts.
-
 ### Key SQL Techniques
 
 The complete SQL ETL pipeline can be viewed here:
@@ -307,6 +295,18 @@ SELECT
     (SELECT COUNT(*) FROM medical_claims_clean),
     (SELECT COUNT(*) FROM rejected_records WHERE record_type = 'medical_claim');
 ```
+### Interactive Tableau Dashboards:
+
+This project includes a multi-dashboard Tableau solution consisting of a landing page and four analytical dashboards. The dashboards allow users to explore behavioral health claims utilization patterns at both the population and provider levels.
+
+### View Interactive Tableau Dashboard:
+
+[Behavioral Health Claims Analytics Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)
+
+### Dashboard Navigation:
+
+![Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
+
 ### Behavioral Health Executive Overview (Executive View)
 
 ![Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
@@ -407,6 +407,33 @@ tableau_pharmacy_claims
 			•	Claim status patterns in pharmacy data
 
 ### Key Findings (High-Level Insights)
+
+***Answers to the Key Questions above, based on the dashboard results:***
+
+- **Depression drives the majority of both medical and pharmacy cost** — $3.24M in medical claims and $61,263 in antidepressant pharmacy spend, both by a wide margin over any other category, consistent across counties and age groups.
+- **Claim outcomes are healthy but not negligible in exception rate** — pharmacy claims show a 72% paid rate, with the remaining ~28% split between denied (13.3%) and reversed (14.5%).
+- **Risk is evenly distributed across the population, but cost is not** — risk tier splits fairly evenly (37.5% moderate, 33.9% low, 28.6% high), while cost is heavily concentrated in Milwaukee and Waukesha counties, where moderate/low-risk members actually drive slightly more total cost than high-risk members — a volume effect more than a risk effect.
+- **Primary Care drives the most cost by volume, not by per-claim price** — Primary Care accounts for $5.73M in total cost (3x the next specialty), despite average cost per claim being similar (~$2,000–2,500) across specialties; Outpatient Clinics and Community Health Centers likewise account for most claim volume over Hospitals and Private Practice.
+- **Rejected claims were driven primarily by enrollment-window mismatches and broken references, not basic data entry errors** — 7,073 medical and 5,461 pharmacy claims were flagged for falling outside a member's enrollment window, and thousands more for referencing an invalid member or provider, far outweighing rejections for missing/invalid codes.
+- **Antidepressants dominate psychiatric medication utilization regardless of segment** — both cost and prescription volume for antidepressants are roughly 4x the next-highest drug category, with a wider cost distribution as well, indicating higher per-prescription cost in addition to higher volume.
+
+### Detailed Dashboard Insights
+
+**Executive Overview**
+- The population is 619 members generating 5,859 validated claims and **$12.8M** in total medical cost, averaging **$2,188 per claim**.
+- Claims volume ramped up steadily through 2021 (from near-zero to ~150/month) then leveled off around 180–220/month through 2022–2023, consistent with a growing/maturing member population rather than seasonal swings.
+- The risk score vs. cost scatterplot shows **no strong correlation** — high-cost claims appear across all three risk tiers, meaning risk score alone isn't a reliable predictor of claim cost.
+
+**Utilization & Population Analysis**
+- The 35–49 age band has both the highest claim volume (1,978) and cost, while members 65+ generate a much smaller share (425 claims) — likely a working-age-driven population.
+- Depression again leads both claim volume (1,436) and cost by a wide margin, consistent with the Executive Overview.
+
+**Provider Performance & Care Delivery**
+- Inpatient length of stay is fairly consistent (~7–8 day median) across specialties, suggesting no single specialty is driving unusually long admissions.
+
+**Pharmacy Utilization & Cost**
+- Monthly pharmacy cost is mostly stable ($10K–17K) but includes a sharp one-month spike to $21,053 — worth flagging as an anomaly to investigate further (data issue vs. genuine utilization spike).
+
 
 ### Tableau Dashboards
 
