@@ -45,6 +45,17 @@ This project reflects a real-world healthcare analytics workflow:
 
 The result is a structured, validated analytics pipeline that mirrors how healthcare claims data is prepared in production BI environments.
 
+### What This Project Demonstrates
+
+- **End-to-end ETL design** — raw landing → staging → validation → cleaning/standardization → curated analytics tables
+- **Data quality enforcement** — a rules-based validation layer that catches bad records (invalid dates, out-of-range risk scores, orphaned foreign keys, invalid codes) before they reach reporting tables
+- **Full auditability** — every rejected record is logged with a specific reason, and an ETL audit log tracks row counts at each stage for reconciliation
+- **Real-world data cleaning patterns** — fuzzy-matching misspelled county names, collapsing inconsistent claim status codes (`PAID`, `PD`, `P`, `PIAD` → `PAID`), standardizing drug names and categories
+- **Feature engineering for analytics** — derived fields like age bands, risk tiers, cost tiers, and diagnosis categories that make the data immediately usable for dashboarding
+- **Root-cause data quality investigation** — going beyond pass/fail validation to explain *why* records fail and adjusting rules based on evidence (e.g., the pharmacy claim status fix)
+- **Business intelligence dashboard design** — translating validated data marts into four purpose-built Tableau dashboards for executive, population, provider, and pharmacy audiences
+- **Performance-conscious design** — targeted indexing on both the curated tables and the final Tableau-facing tables to support fast filtering and aggregation
+
 ### Key Questions This Project Answers:
 
 * What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
