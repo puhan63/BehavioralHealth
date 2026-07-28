@@ -39,10 +39,6 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 This project reflects a real-world healthcare analytics workflow:
 
 	- Raw claims and enrollment data is messy and inconsistent
-
-This project reflects a real-world healthcare analytics workflow:
-
-	- Raw claims and enrollment data is messy and inconsistent
 	- Enrollment-window and referential integrity checks are required before analysis
 	- Data quality issues must be tracked and resolved, not silently dropped
 	- Both population-level and provider-level views are necessary for meaningful insight
@@ -457,6 +453,14 @@ tableau_pharmacy_claims
 	- Integration of socioeconomic and social determinants of health data
 	- Anomaly detection for unusual claims patterns (e.g., the pharmacy cost spike identified in this analysis)
 	
+### How To Run:
+
+1. Set up a MySQL instance and ensure `local_infile` is enabled.
+2. Clone this repository and update the file paths in the `LOAD DATA LOCAL INFILE` statements to point to your local copies of the source CSVs.
+3. Run `Behavioral_Health_ETL.sql` (the full pipeline script) top to bottom — it drops and rebuilds all objects, so it's safe to re-run repeatedly during development.
+4. Query `tableau_medical_claims` and `tableau_pharmacy_claims` directly, or connect Tableau (or another BI tool) to those tables.
+5. Optionally, run `Behavioral_Health_Data_Quality_Analysis.sql` afterward to explore root causes behind rejected records in more depth.
+
 ### Repository Contents:
 
 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
