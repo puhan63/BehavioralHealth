@@ -39,6 +39,10 @@ All data was processed in a SQL-based ETL pipeline built from raw ingestion to f
 This project reflects a real-world healthcare analytics workflow:
 
 	- Raw claims and enrollment data is messy and inconsistent
+
+This project reflects a real-world healthcare analytics workflow:
+
+	- Raw claims and enrollment data is messy and inconsistent
 	- Enrollment-window and referential integrity checks are required before analysis
 	- Data quality issues must be tracked and resolved, not silently dropped
 	- Both population-level and provider-level views are necessary for meaningful insight
