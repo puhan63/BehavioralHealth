@@ -473,7 +473,7 @@ tableau_pharmacy_claims
 
 🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
 
-📊 Tableau Dashboard: not yet published
+📊 Interactive Tableau Dashboard Workbook: [View Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)
 
 ### About the Author
 
