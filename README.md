@@ -475,7 +475,7 @@ tableau_pharmacy_claims
 
 📊 Tableau Dashboard: not yet published
 
-About the Author
+### About the Author
 
 Patricia Uhan, M.S.
 
