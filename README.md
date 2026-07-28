@@ -2,19 +2,19 @@
 
 ### Quick Summary:
 
-Built a production-style SQL ETL pipeline processing 35,000+ synthetic behavioral health and pharmacy claims.
-Designed member-level and provider-level analytical data marts for downstream analytics and Tableau reporting.
-Cleaned, standardized, and validated highly inconsistent healthcare datasets using rules-based ETL logic.
-Implemented enrollment-window validation, referential integrity checks, and comprehensive data quality controls.
-Investigated and resolved complex data quality issues, including risk score handling, pharmacy claim status validation, and county standardization.
-Built Tableau-ready datasets powering four interactive dashboards for executive, population, provider, and pharmacy analytics.
+	* Built a production-style SQL ETL pipeline processing 35,000+ synthetic behavioral health and pharmacy claims.
+	* Designed member-level and provider-level analytical data marts for downstream analytics and Tableau reporting.
+	* Cleaned, standardized, and validated highly inconsistent healthcare datasets using rules-based ETL logic.
+	* Implemented enrollment-window validation, referential integrity checks, and comprehensive data quality controls.
+	* Investigated and resolved complex data quality issues, including risk score handling, pharmacy claim status validation, and county standardization.
+	* Built Tableau-ready datasets powering four interactive dashboards for executive, population, provider, and pharmacy analytics.
 
 This project demonstrates a production-style SQL analytics pipeline that transforms raw, messy behavioral health data into clean, analytics-ready datasets. Using synthetic claims, enrollment, and provider data, the pipeline uncovers trends in member risk, diagnosis patterns, healthcare utilization, and pharmacy usage while enforcing rigorous data quality standards throughout the ETL process.
 
 The final solution supports two complementary levels of analysis:
 
-Population-level analytics: Member risk, diagnosis mix, demographic trends, and utilization across counties.
-Provider-level analytics: Provider specialty, facility type, utilization patterns, and cost analysis.
+	* Population-level analytics: Member risk, diagnosis mix, demographic trends, and utilization across counties.
+	* Provider-level analytics: Provider specialty, facility type, utilization patterns, and cost analysis.
 
 **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
 
