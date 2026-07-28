@@ -465,7 +465,7 @@ tableau_pharmacy_claims
 
 📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
 
-🔍 Data Quality & Root-Cause Analysis: `Behavioral_Health_Data_Quality_Analysis.sql`
+🔍 Data Quality & Root-Cause Analysis: [View SQL Data Quality Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)
 
 📁 Cleaned Analytical Data Marts: `tableau_medical_claims`, `tableau_pharmacy_claims`
 
