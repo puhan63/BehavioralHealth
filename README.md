@@ -2,21 +2,21 @@
 
 ### Quick Summary:
 
-*  Built a SQL-based ETL pipeline processing 35,000+ behavioral health and pharmacy claims
-*  Designed member-level and provider-level analytical data martsCleaned, standardized, and validated highly inconsistent healthcare datasets
-*  Implemented enrollment-window validation and strict data integrity checksResolved complex edge cases including risk score handling and pharmacy status anomalies
-*  Built Tableau-ready datasets for utilization, risk, and provider performance analysis
+Built a production-style SQL ETL pipeline processing 35,000+ synthetic behavioral health and pharmacy claims.
+Designed member-level and provider-level analytical data marts for downstream analytics and Tableau reporting.
+Cleaned, standardized, and validated highly inconsistent healthcare datasets using rules-based ETL logic.
+Implemented enrollment-window validation, referential integrity checks, and comprehensive data quality controls.
+Investigated and resolved complex data quality issues, including risk score handling, pharmacy claim status validation, and county standardization.
+Built Tableau-ready datasets powering four interactive dashboards for executive, population, provider, and pharmacy analytics.
 
-This project focuses on building a production-style SQL analytics pipeline that transforms raw, messy behavioral health data into clean, business-ready insights. Using synthetic claims, enrollment files, and provider records, the pipeline uncovers trends in member risk, diagnosis patterns, and pharmacy usage across a health plan's population. Ultimately, it converts highly inconsistent source data into validated, Tableau-ready datasets built to drive real-world healthcare decision-making.
+This project demonstrates a production-style SQL analytics pipeline that transforms raw, messy behavioral health data into clean, analytics-ready datasets. Using synthetic claims, enrollment, and provider data, the pipeline uncovers trends in member risk, diagnosis patterns, healthcare utilization, and pharmacy usage while enforcing rigorous data quality standards throughout the ETL process.
 
-The final output supports two levels of analysis:
+The final solution supports two complementary levels of analysis:
 
-```
-    •	Population-level trends (member risk, diagnosis mix, and utilization across counties)  
-    •	Provider-level behavior (specialty, facility type, and utilization/cost patterns by provider) 
-```
+Population-level analytics: Member risk, diagnosis mix, demographic trends, and utilization across counties.
+Provider-level analytics: Provider specialty, facility type, utilization patterns, and cost analysis.
 
-> **Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
+**Note:** All data used in this project is fully synthetic and generated for demonstration purposes only. No real patient, provider, or claims data is used.
 
 ### Tech Stack
 
