@@ -309,15 +309,18 @@ SELECT
 ```
 ### Interactive Tableau Dashboards:
 
-This project includes a multi-dashboard Tableau solution consisting of a landing page and four analytical dashboards. The dashboards allow users to explore behavioral health claims utilization patterns at both the population and provider levels.
+This project includes a multi-dashboard Tableau workbook consisting of a landing page and four interactive analytical dashboards. Together, the dashboards provide executive, population, provider, and pharmacy views of behavioral health utilization using the validated analytical data marts produced by the SQL ETL pipeline.
 
-### View Interactive Tableau Dashboard:
+### View Interactive Tableau Dashboard Workbook:
 
 [Behavioral Health Claims Analytics Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)
 
 ### Dashboard Navigation:
 
-![Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
+🏠 Landing Page
+(https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
+
+Provides a central navigation hub for the four analytical dashboards.
 
 ### Behavioral Health Executive Overview (Executive View)
 
