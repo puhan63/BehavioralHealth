@@ -20,8 +20,9 @@ The final solution supports two complementary levels of analysis:
 
 ### Tech Stack
 
-- **SQL (MySQL)** — all ETL logic, validation rules, and transformations
-- **Tableau (Tableau Public)** — landing page and four analytical dashboards built on the final analytics tables
+- **MySQL** — ETL pipeline, validation, feature engineering, and analytical data marts
+- **SQL** — Data cleaning, transformation, auditing, and performance optimization
+- **Tableau Public** — Interactive dashboards and business intelligence reporting
 
 ### Data Overview
 
@@ -140,6 +141,8 @@ The member and provider tables retain the large majority of records, since most 
 - `tableau_medical_claims`: 5,859 rows, one per validated medical claim, fully joined with member and provider attributes
 - `tableau_pharmacy_claims`: 4,435 rows, one per validated pharmacy claim, fully joined with member attributes
 
+These analytical data marts serve as the direct data source for the Tableau dashboards, requiring no additional joins or data preparation within the reporting layer.
+
 ## Data Quality
 
 The ETL pipeline performs comprehensive validation before records enter the analytical data marts, including:
@@ -153,11 +156,26 @@ The ETL pipeline performs comprehensive validation before records enter the anal
 
 Additional investigation of validation failures is documented in **Technical_Design.md**.
 
-## Technical Design
+## Technical Documentation
 
-Detailed documentation covering the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization is available here:
+Detailed technical documentation—including the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization—is available here:
 
 📘 **[Technical_Design.md](Technical_Design.md)**
+
+## SQL Pipeline
+
+The complete SQL ETL pipeline that powers this project is available here:
+
+📄 **[Behavioral_Health_ETL.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
+
+The pipeline performs:
+
+- Raw data ingestion
+- Validation
+- Cleaning and standardization
+- Feature engineering
+- Analytical data mart creation
+- Audit logging
 
 ## 📊 Interactive Tableau Dashboard
 
@@ -252,7 +270,7 @@ https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau
 | 📄 **[README.md](README.md)**                                                                                                                                                | Project overview, architecture summary, ETL results, Tableau dashboard previews, and setup instructions.                                                              |
 | 📘 **[Technical_Design.md](Technical_Design.md)**                                                                                                                            | Detailed documentation covering the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization.  |
 | 🗄️ **[Behavioral Health Queries.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**                                             | Complete SQL ETL pipeline including raw data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, and audit logging. |
-| 🔍 **[Behavioral Health Data Quality Analysis.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)**              | Read-only investigative SQL queries used to analyze validation failures, verify ETL rules, and identify root causes behind rejected records.                          |
+| 🔍 **[Behavioral Health Data Quality Analysis.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)**              | Read-only SQL investigation script used to analyze validation failures, verify ETL rules, and identify root causes behind rejected records.                          |
 | 📊 **[Interactive Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)** | Interactive Tableau workbook containing the Executive Overview, Population Health, Provider Performance, and Pharmacy Utilization dashboards.                         |
 | 📁 **Analytical Data Marts**                                                                                                                                                 | Final analytics-ready tables: `tableau_medical_claims` and `tableau_pharmacy_claims`, designed for business intelligence reporting.                                   |
 
