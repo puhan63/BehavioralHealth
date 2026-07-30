@@ -196,7 +196,7 @@ https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau
 
 #### 📊 Executive Overview
 
-![📊 Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20\(1\).png)
+![📊 Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview.png)
 
 ---
 
