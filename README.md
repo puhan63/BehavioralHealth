@@ -140,7 +140,7 @@ The member and provider tables retain the large majority of records, since most 
 - `tableau_medical_claims`: 5,859 rows, one per validated medical claim, fully joined with member and provider attributes
 - `tableau_pharmacy_claims`: 4,435 rows, one per validated pharmacy claim, fully joined with member attributes
 
-These analytical data marts serve as the direct data source for the Tableau dashboards, requiring no additional joins or data preparation within the reporting layer.
+These analytical data marts serve as the direct data source for the Tableau dashboards, requiring no additional joins or transformations within the reporting layer.
 
 ## Data Quality
 
@@ -155,7 +155,7 @@ The ETL pipeline performs comprehensive validation before records enter the anal
 
 Additional investigation of validation failures is documented in **Technical_Design.md**.
 
-## Technical Documentation
+## Technical Design Documentation
 
 Detailed technical documentation—including the ETL architecture, validation framework, SQL implementation, feature engineering, and dashboard design—is available here:
 
@@ -228,23 +228,6 @@ https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau
 - **Primary Care drives the most cost by volume, not by per-claim price** — Primary Care accounts for $5.73M in total cost (3x the next specialty), despite average cost per claim being similar (~$2,000–2,500) across specialties; Outpatient Clinics and Community Health Centers likewise account for most claim volume over Hospitals and Private Practice.
 - **Rejected claims were driven primarily by enrollment-window mismatches and broken references, not basic data entry errors** — 7,073 medical and 5,461 pharmacy claims were flagged for falling outside a member's enrollment window, and thousands more for referencing an invalid member or provider, far outweighing rejections for missing/invalid codes.
 - **Antidepressants dominate psychiatric medication utilization regardless of segment** — both cost and prescription volume for antidepressants are roughly 4x the next-highest drug category, with a wider cost distribution as well, indicating higher per-prescription cost in addition to higher volume.
-
-### Detailed Dashboard Insights
-
-**Executive Overview**
-- The population is 619 members generating 5,859 validated claims and **$12.8M** in total medical cost, averaging **$2,188 per claim**.
-- Claims volume ramped up steadily through 2021 (from near-zero to ~150/month) then leveled off around 180–220/month through 2022–2023, consistent with a growing/maturing member population rather than seasonal swings.
-- The risk score vs. cost scatterplot shows **no strong correlation** — high-cost claims appear across all three risk tiers, meaning risk score alone isn't a reliable predictor of claim cost.
-
-**Utilization & Population Analysis**
-- The 35–49 age band has both the highest claim volume (1,978) and cost, while members 65+ generate a much smaller share (425 claims) — likely a working-age-driven population.
-- Depression again leads both claim volume (1,436) and cost by a wide margin, consistent with the Executive Overview.
-
-**Provider Performance & Care Delivery**
-- Inpatient length of stay is fairly consistent (~7–8 day median) across specialties, suggesting no single specialty is driving unusually long admissions.
-
-**Pharmacy Utilization & Cost**
-- Monthly pharmacy cost is mostly stable ($10K–17K) but includes a sharp one-month spike to $21,053 — worth flagging as an anomaly to investigate further (data issue vs. genuine utilization spike).
 
 ### Future Enhancements
 	
