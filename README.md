@@ -65,34 +65,39 @@ The result is a structured, validated analytics pipeline that mirrors how health
 * Why are claims getting rejected? What is the main culprit behind rejections—enrollment gaps, missing provider data, or bad codes?
 * What do pharmacy patterns look like? How does psychiatric medication use—including drug types, supply lengths, and costs—change based on a member's risk score?
 
-### Project Architecture:
+## Project Architecture
 
+The project follows a modular SQL-based ETL architecture that transforms raw behavioral health data into validated, analytics-ready datasets for Tableau reporting. The pipeline separates data ingestion, validation, transformation, feature engineering, and reporting into distinct stages, making the workflow easier to maintain, audit, and extend.
 
+```text
+Raw Behavioral Health Data
+(Members, Providers, Medical Claims, Pharmacy Claims)
+                │
+                ▼
+        SQL ETL Pipeline
+                │
+                ▼
+     Validation & Data Quality Checks
+                │
+                ▼
+   Cleaning & Standardization
+                │
+                ▼
+      Feature Engineering
+                │
+                ▼
+   Analytical Data Marts
+(tableau_medical_claims &
+ tableau_pharmacy_claims)
+                │
+                ▼
+      Tableau Dashboards
 ```
-Raw Behavioral Health CSVs (Members, Providers, Medical & Pharmacy Claims)
-      │
-      ▼
-SQL Staging Tables
-      │
-      ▼
-Data Validation & Rejected Records Log
-      │
-      ▼
-Cleaning & Standardization
-      │
-      ▼
-Feature Engineering (risk tiers, age bands, cost tiers, diagnosis groups)
-      │
-      ▼
-Analytical Data Marts
-      │
-      ├──────────────► Medical Claims Dataset (tableau_medical_claims)
-      │
-      └──────────────► Pharmacy Claims Dataset (tableau_pharmacy_claims)
-                              │
-                              ▼
-                       Tableau Dashboards
-```
+
+The ETL pipeline produces two denormalized analytical data marts that support interactive Tableau dashboards for executive reporting, population health analysis, provider performance, and pharmacy utilization.
+
+📘 **For detailed technical documentation, including the ETL architecture, validation framework, SQL design decisions, dashboard design, and performance optimization, see [Technical_Design.md](Technical_Design.md).**
+
 ### Project Scale:
 
 Numbers below are from an actual run of the pipeline against the synthetic source files.
@@ -135,244 +140,66 @@ The member and provider tables retain the large majority of records, since most 
 - `tableau_medical_claims`: 5,859 rows, one per validated medical claim, fully joined with member and provider attributes
 - `tableau_pharmacy_claims`: 4,435 rows, one per validated pharmacy claim, fully joined with member attributes
 
-## Data Quality & Root-Cause Analysis
+## Data Quality
 
-Beyond the pipeline's built-in validation, a separate analysis script (`Behavioral_Health_Data_Quality_Analysis.sql`) digs deeper into *why* certain records fail validation — read-only investigative queries that don't modify any tables. This is meant to answer the follow-up questions a data quality report naturally raises, such as:
+The ETL pipeline performs comprehensive validation before records enter the analytical data marts, including:
 
-- **Enrollment mismatches**: Are claims failing because they came in *before* enrollment started, or *after* it ended? How large are those gaps typically (days, months, over a year)? Which members have the most claims outside their enrollment window?
-- **Risk score integrity**: What's the distribution of risk scores before and after cleaning? Are any invalid scores slipping through to the clean table? What does the final risk tier breakdown look like?
-- **Gender data quality**: What values actually show up in the raw gender field, how many get standardized vs. rejected, and what does the cleaned distribution look like?
-- **Pharmacy claim status consistency**: What non-standard status values appear in the raw data, and are they being caught by validation as expected?
-- **Facility type completeness**: Which providers are missing facility type, and are they being rejected correctly?
-- **County standardization**: How many distinct county spellings exist in the raw data vs. after standardization, and which records fall back to "UNKNOWN"?
+- Enrollment window validation
+- Referential integrity checks
+- Risk score validation
+- Pharmacy claim status validation
+- Facility type validation
+- County standardization
 
-This script is meant to be run after the main ETL pipeline, and its output is diagnostic rather than a data product — it's there to spot-check that the validation rules are behaving as intended and to surface patterns that might warrant new rules down the line.
+Additional investigation of validation failures is documented in **Technical_Design.md**.
 
-### 1. Risk Score Validation
+## Technical Design
 
-**Issue:** During initial ingestion, blank `risk_score` values were being silently converted to `0` rather than `NULL` — which would have caused missing risk data to be misclassified as a valid (and very low) risk score.
+Detailed documentation covering the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization is available here:
 
-**Fix:** The load step was updated to explicitly convert blanks to `NULL`, so the validation layer could correctly flag them as missing rather than treating them as legitimate zeros.
+📘 **[Technical_Design.md](Technical_Design.md)**
 
-**Validation rule:** A risk score is invalid if it's missing, below 0, or above the expected maximum of 5. Invalid records are logged in `rejected_records` and excluded downstream.
+## 📊 Interactive Tableau Dashboard
 
-**Outcome:** This prevented incomplete risk data from silently skewing member risk segmentation and reporting.
+This project includes an interactive Tableau workbook built from the validated analytical data marts generated by the SQL ETL pipeline. The dashboards provide insights into behavioral health utilization, population health trends, provider performance, and pharmacy utilization while using a consistent set of validated business rules and engineered features.
 
-### 2. Enrollment Dates vs. Medical Service Dates
+### 🔗 Live Tableau Workbook
 
-**Issue:** Medical claims were checked to confirm service dates fall within each member's active enrollment window.
+**Behavioral Health Claims Analytics Dashboard**
 
-| Issue Type | Claims |
-|---|---:|
-| Before Enrollment Start | 4,725 |
-| After Enrollment End | 2,676 |
-| **Total Outside Enrollment** | **7,401** |
+https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes
 
-*Before Enrollment Start* — how far in advance of coverage the claim occurred:
+### Dashboard Preview
 
-| Timing | Claims |
-|---|---:|
-| 0–7 days before | 82 |
-| 8–30 days before | 280 |
-| 31–90 days before | 610 |
-| 91–365 days before | 2,326 |
-| Over 1 year before | 1,427 |
-
-Average gap: **~277 days** before enrollment started.
-
-*After Enrollment End* — how long after coverage ended the claim occurred:
-
-| Timing | Claims |
-|---|---:|
-| 0–7 days after | 45 |
-| 8–30 days after | 193 |
-| 31–90 days after | 442 |
-| 91–365 days after | 1,340 |
-| Over 1 year after | 656 |
-
-**ETL decision:** Since most exceptions fell far outside any reasonable billing-timing window (not just a few days of normal lag), these were treated as genuine data quality issues rather than minor timing noise — logged to `rejected_records`, excluded from utilization analysis, but retained for audit and potential source-system follow-up.
-
-### 3. Pharmacy Claim Status Validation
-
-**Issue:** An earlier version of the validation rule rejected 2,144 pharmacy claims for "invalid" claim status.
-
-| Rejected Status | Count |
-|---|---:|
-| REVERSED | 2,142 |
-| REVERSE | 1 |
-| PIAD | 1 |
-
-**Investigation:** Profiling the rejected values showed `REVERSED` (and its variant `REVERSE`) is a legitimate pharmacy claim lifecycle status, not a data error — it had simply been left out of the accepted-status list. `PIAD` was a genuine data entry typo for `PAID`.
-
-**ETL improvement:** The validation rule was updated to accept `PAID`, `DENIED`, and `REVERSED` (plus their common abbreviations/typos), while continuing to reject truly invalid values.
-
-**Outcome:** This distinguished real business statuses from actual data errors, preventing thousands of legitimate reversed claims from being incorrectly excluded from analysis.
-
-### 4. Facility Type Validation
-
-**Issue:** 6 providers were missing a `facility_type` value.
-
-**Validation rule:** Facility type is invalid if missing or blank; invalid providers are logged and excluded from downstream provider analysis.
-
-**Outcome:** Ensured provider-level reporting (facility comparisons, utilization by facility type) is based only on complete classification data.
-
-### 5. County Standardization Validation
-
-**Issue:** Member county values used inconsistent naming and spelling (extra spaces, mixed case, common misspellings).
-
-| Original Value | Standardized Value |
-|---|---|
-| Milwaukee | MILWAUKEE |
-| Milwauke | MILWAUKEE |
-| Waukesh | WAUKESHA |
-| Rasine | RACINE |
-
-**ETL decision:** Values were standardized to uppercase with misspellings mapped to their correct county; unrecognized or missing values were mapped to `UNKNOWN` rather than dropped, preserving those members in analysis while flagging their location as unresolved.
-
-**Outcome:** Consistent geographic grouping in the final Tableau-ready datasets.
-
-> **Note:** Figures in this section come from a separate run of the investigative analysis script and may differ slightly from the headline counts in *Pipeline Results* above (e.g., due to re-generated synthetic source data between runs). The value of this section is in the *patterns and decisions* it documents, not in reconciling exact totals across runs.
-
-### Key SQL Techniques
-
-The complete SQL ETL pipeline can be viewed here:
-
-➡️ **[Full SQL Pipeline](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
-
-**1. Anti-join validation pattern (`NOT EXISTS`)**
-
-Validation and cleaning are kept decoupled — a record fails validation once, and every downstream query simply excludes anything logged in `rejected_records`, without ever deleting the raw or staged data:
-
-```sql
-WHERE NOT EXISTS (
-    SELECT 1 FROM rejected_records r
-    WHERE r.record_type = 'medical_claim'
-      AND r.record_id = stage_medical.claim_id
-)
-```
-
-**2. Referential integrity via `LEFT JOIN` + `IS NULL`**
-
-Every claim is checked against the cleaned member and provider tables to catch orphaned foreign keys before they reach the analytics layer:
-
-```sql
-FROM stage_medical m
-LEFT JOIN members_clean c
-       ON UPPER(TRIM(m.member_id)) = c.member_id
-WHERE c.member_id IS NULL
-```
-
-**3. Fuzzy standardization with layered `CASE` / `LIKE`**
-
-Misspellings and formatting variants are collapsed into a single canonical value — used for both county names and drug names:
-
-```sql
-CASE
-    WHEN UPPER(TRIM(county)) LIKE '%MILWAUKEE%'
-         OR UPPER(TRIM(county)) LIKE '%MILWAUKE%'
-        THEN 'MILWAUKEE'
-    WHEN UPPER(TRIM(county)) LIKE '%RACINE%'
-         OR UPPER(TRIM(county)) LIKE '%RACIN%'
-         OR UPPER(TRIM(county)) LIKE '%RASINE%'
-        THEN 'RACINE'
-    ELSE 'UNKNOWN'
-END AS county
-```
-
-**4. Load-time NULL handling with session variables**
-
-Blank numeric values from the raw CSV are explicitly converted to `NULL` at load time rather than being silently coerced to `0` — a fix directly tied to a real data quality bug found during validation (see *Data Quality Investigations* above):
-
-```sql
-LOAD DATA LOCAL INFILE '...'
-INTO TABLE raw_members
-...
-(member_id, dob, gender, county, enrollment_start, enrollment_end, @risk_score)
-SET risk_score = NULLIF(TRIM(@risk_score), '');
-```
-
-**5. Full audit trail via metadata tables**
-
-Two lightweight tables give the pipeline a complete data-quality audit trail without adding complexity to the transformation logic itself:
-
-- `rejected_records` — row-level log of every record that failed validation, with a specific rejection reason
-- `etl_audit_log` — aggregate row counts before/after cleaning at each stage, for quick reconciliation
-
-```sql
-INSERT INTO etl_audit_log (process_step, source_table, rows_before, rows_after, rows_removed)
-SELECT
-    'medical_claim_clean_load',
-    'medical_claims_clean',
-    (SELECT COUNT(*) FROM stage_medical),
-    (SELECT COUNT(*) FROM medical_claims_clean),
-    (SELECT COUNT(*) FROM rejected_records WHERE record_type = 'medical_claim');
-```
-### Interactive Tableau Dashboards:
-
-This project includes a multi-dashboard Tableau workbook consisting of a landing page and four interactive analytical dashboards. Together, the dashboards provide executive, population, provider, and pharmacy views of behavioral health utilization using the validated analytical data marts produced by the SQL ETL pipeline.
-
-### View Interactive Tableau Dashboard Workbook:
-
-[Behavioral Health Claims Analytics Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)
-
-### Dashboard Navigation:
+#### 🏠 Landing Page
 
 ![🏠 Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
 
-Provides a central navigation hub for the four analytical dashboards.
+---
 
-### Behavioral Health Executive Overview (Executive View)
+#### 📊 Executive Overview
 
-![📊 Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
+![📊 Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20\(1\).png)
 
-		Dataset: tableau_medical_claims (5,859 validated medical claims)
+---
 
-		Focus:
-
-		- Executive KPIs (members, claims, total cost)
-		- Risk score and cost analysis
-		- Diagnosis-level spending
-		- Monthly medical claims trends
-
-### Behavioral Health Utilization & Population Analysis
+#### 👥 Population Health Analysis
 
 ![👥 Behavioral Health Utilization & Population Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Utilization%20%26%20Population%20Analysis.png)
 
-		Dataset: tableau_medical_claims (5,859 validated medical claims)
+---
 
-		Focus:
-
-		- Population segmentation by age, gender, and risk tier
-		- County-level utilization comparisons
-		- Diagnosis mix across the population
-		- Geographic concentration of high-risk members
-
-### Provider Performance & Care Delivery Analysis
+#### 🏥 Provider Performance
 
 ![🏥 Provider Performance & Care Delivery Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Performance%20%26%20Care%20Delivery%20Analysis.png)
 
-		Dataset: tableau_medical_claims (5,859 validated medical claims)
+---
 
-		Focus:
-
-		- Provider specialty comparisons
-		- Facility type utilization
-		- Claim status by provider domain
-		- Cost and utilization by provider
-
-### Pharmacy Utilization & Cost Analysis
+#### 💊 Pharmacy Utilization & Cost Analysis
 
 ![💊 Pharmacy Utilization & Cost Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Utilization%20%26%20Cost%20Analysis.png)
 
-		Dataset: tableau_pharmacy_claims (4,435 validated pharmacy claims)
-
-		Focus:
-
-		- Medication utilization by drug category
-		- Pharmacy cost trends
-		- Days supply and quantity analysis
-		- Risk tier versus pharmacy utilization
-		- Pharmacy claim status patterns
+📘 **Detailed dashboard documentation—including business objectives, key metrics, intended audience, design principles, and the relationship between the SQL ETL pipeline and Tableau—is available in [Technical_Design.md](Technical_Design.md).**
 
 ### Key Findings (High-Level Insights)
 
@@ -420,17 +247,15 @@ Provides a central navigation hub for the four analytical dashboards.
 
 ### Repository Contents:
 
-📄 Full SQL ETL Pipeline: [View SQL Code](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)
+| File                                                                                                                                                                         | Description                                                                                                                                                           |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 📄 **[README.md](README.md)**                                                                                                                                                | Project overview, architecture summary, ETL results, Tableau dashboard previews, and setup instructions.                                                              |
+| 📘 **[Technical_Design.md](Technical_Design.md)**                                                                                                                            | Detailed documentation covering the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization.  |
+| 🗄️ **[Behavioral Health Queries.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**                                             | Complete SQL ETL pipeline including raw data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, and audit logging. |
+| 🔍 **[Behavioral Health Data Quality Analysis.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)**              | Read-only investigative SQL queries used to analyze validation failures, verify ETL rules, and identify root causes behind rejected records.                          |
+| 📊 **[Interactive Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)** | Interactive Tableau workbook containing the Executive Overview, Population Health, Provider Performance, and Pharmacy Utilization dashboards.                         |
+| 📁 **Analytical Data Marts**                                                                                                                                                 | Final analytics-ready tables: `tableau_medical_claims` and `tableau_pharmacy_claims`, designed for business intelligence reporting.                                   |
 
-🔍 Data Quality & Root-Cause Analysis: [View SQL Data Quality Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)
-
-📁 Cleaned Analytical Data Marts: `tableau_medical_claims`, `tableau_pharmacy_claims`
-
-📘 Data Documentation: this README
-
-🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
-
-📊 Interactive Tableau Dashboard Workbook: [View Interactive Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)
 
 ### About the Author
 
