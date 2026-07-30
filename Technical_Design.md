@@ -1,5 +1,20 @@
 # Technical Design
 
+This document provides detailed technical documentation for the **Behavioral Health Claims Utilization & Risk Analytics** project. It explains the ETL architecture, validation framework, SQL implementation, feature engineering strategy, dashboard design, and performance optimization decisions used to transform raw behavioral health data into analytics-ready datasets for Tableau reporting.
+
+While the repository README provides a high-level overview of the project, this document focuses on the engineering decisions, implementation details, and design principles behind the solution.
+
+---
+
+## Table of Contents
+
+- [ETL Architecture](#etl-architecture)
+- [Validation Framework & Root-Cause Analysis](#validation-framework--root-cause-analysis)
+- [SQL Design Decisions](#sql-design-decisions)
+- [Dashboard Design](#dashboard-design)
+- [Performance Optimization](#performance-optimization)
+- [Future Enhancements](#future-enhancements)
+
 ## ETL Architecture
 
 The ETL pipeline was designed using a multi-stage architecture that separates raw data ingestion, validation, transformation, feature engineering, and reporting. Each stage has a clearly defined responsibility, making the pipeline easier to maintain, debug, audit, and extend.
@@ -315,3 +330,453 @@ Average gap: **~277 days** before enrollment started.
 **Outcome:** Consistent geographic grouping in the final Tableau-ready datasets.
 
 > **Note:** Figures in this section come from a separate run of the investigative analysis script and may differ slightly from the headline counts in *Pipeline Results* above (e.g., due to re-generated synthetic source data between runs). The value of this section is in the *patterns and decisions* it documents, not in reconciling exact totals across runs.
+
+## SQL Design Decisions
+
+The SQL ETL pipeline was designed to prioritize data quality, auditability, and maintainability over simply producing clean output tables. Rather than relying on one-off transformations, the pipeline uses reusable SQL patterns that enforce consistent business rules throughout each stage of processing.
+
+The complete SQL ETL pipeline can be viewed here:
+
+➡️ **[Full SQL Pipeline](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
+
+---
+
+### Validation Using `NOT EXISTS`
+
+Validation and transformation are intentionally separated. Records are validated once and logged to the `rejected_records` table if they fail any business rule. Downstream transformation queries simply exclude rejected records rather than repeating validation logic or deleting source data.
+
+This approach keeps the ETL pipeline modular, reduces duplicated code, and provides a complete audit trail for every rejected record.
+
+```sql
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM rejected_records r
+    WHERE r.record_type = 'medical_claim'
+      AND r.record_id = stage_medical.claim_id
+)
+```
+
+---
+
+### Referential Integrity Using `LEFT JOIN`
+
+Medical and pharmacy claims are validated against the cleaned member and provider reference tables before entering the analytical data marts. Records with missing or invalid foreign keys are identified using `LEFT JOIN` and `IS NULL`.
+
+This ensures that only claims linked to valid members and providers are included in downstream reporting.
+
+```sql
+FROM stage_medical m
+LEFT JOIN members_clean c
+       ON UPPER(TRIM(m.member_id)) = c.member_id
+WHERE c.member_id IS NULL
+```
+
+---
+
+### Data Standardization Using `CASE` Expressions
+
+Real-world healthcare data frequently contains inconsistent spelling, abbreviations, and formatting. Layered `CASE` expressions combined with pattern matching were used to standardize values into consistent business categories.
+
+This technique was applied to county names, pharmacy claim status values, drug categories, and other categorical fields used throughout the analytical data marts.
+
+```sql
+CASE
+    WHEN UPPER(TRIM(county)) LIKE '%MILWAUKEE%'
+         OR UPPER(TRIM(county)) LIKE '%MILWAUKE%'
+        THEN 'MILWAUKEE'
+    WHEN UPPER(TRIM(county)) LIKE '%RACINE%'
+         OR UPPER(TRIM(county)) LIKE '%RACIN%'
+         OR UPPER(TRIM(county)) LIKE '%RASINE%'
+        THEN 'RACINE'
+    ELSE 'UNKNOWN'
+END AS county
+```
+
+---
+
+### Load-Time NULL Handling
+
+Missing numeric values should remain missing rather than being converted into valid values. During data ingestion, blank fields are explicitly converted to `NULL` using session variables before validation begins.
+
+This design prevented blank `risk_score` values from being interpreted as legitimate zero values and allowed the validation framework to correctly identify incomplete records.
+
+```sql
+LOAD DATA LOCAL INFILE '...'
+INTO TABLE raw_members
+...
+(member_id, dob, gender, county,
+ enrollment_start, enrollment_end,
+ @risk_score)
+
+SET risk_score = NULLIF(TRIM(@risk_score), '');
+```
+
+---
+
+### Audit Logging
+
+The ETL pipeline maintains a complete audit trail using lightweight metadata tables that document both rejected records and pipeline execution statistics.
+
+Two supporting tables provide this functionality:
+
+- **`rejected_records`** – Stores every record rejected during validation together with the specific rejection reason.
+- **`etl_audit_log`** – Captures row counts before and after each ETL stage, allowing pipeline execution to be reconciled and monitored.
+
+This approach improves transparency, simplifies debugging, and makes it easy to verify that every transformation stage produced the expected results.
+
+```sql
+INSERT INTO etl_audit_log
+(
+    process_step,
+    source_table,
+    rows_before,
+    rows_after,
+    rows_removed
+)
+
+SELECT
+    'medical_claim_clean_load',
+    'medical_claims_clean',
+    (SELECT COUNT(*) FROM stage_medical),
+    (SELECT COUNT(*) FROM medical_claims_clean),
+    (
+        SELECT COUNT(*)
+        FROM rejected_records
+        WHERE record_type = 'medical_claim'
+    );
+```
+---
+
+## Feature Engineering
+
+To support efficient reporting and consistent business logic, several analytical features are derived during the ETL process rather than being calculated within Tableau. Performing feature engineering in SQL ensures that every dashboard, query, and downstream analysis uses the same standardized definitions while reducing the number of calculated fields required in the reporting layer.
+
+The ETL pipeline generates the following derived features:
+
+- **Age Bands** – Groups members into standardized age categories for demographic and utilization analysis.
+- **Risk Tiers** – Categorizes members into Low, Moderate, and High risk groups based on validated risk scores.
+- **Cost Tiers** – Segments claims into spending categories to support cost distribution and utilization reporting.
+- **Diagnosis Categories** – Maps diagnosis codes into broader behavioral health groupings to simplify population-level analysis.
+- **Standardized Provider Attributes** – Normalizes provider specialty and facility type values for consistent provider performance reporting.
+- **Standardized Geographic Values** – Cleans and standardizes county names to ensure accurate geographic aggregation.
+
+Engineering these features during ETL provides several advantages:
+
+- Maintains consistent business definitions across all dashboards and analyses.
+- Improves Tableau performance by reducing complex calculated fields.
+- Simplifies downstream reporting and ad hoc SQL analysis.
+- Ensures analytical variables are created once and reused throughout the project.
+- Produces analytics-ready data marts that require minimal additional transformation before visualization.
+
+This approach reflects a production-style healthcare analytics workflow, where business logic is centralized within the ETL pipeline rather than duplicated across multiple reporting tools.
+
+## Dashboard Design
+
+The SQL ETL pipeline produces two curated analytical data marts (`tableau_medical_claims` and `tableau_pharmacy_claims`) specifically designed for business intelligence reporting. Rather than requiring Tableau to perform complex joins, data cleaning, or feature engineering, all transformations are completed during the ETL process. This allows Tableau to function primarily as a visualization layer, improving dashboard performance while ensuring consistent business logic across every report.
+
+The Tableau workbook consists of a landing page and four analytical dashboards. Each dashboard targets a different business audience while drawing from the same validated analytical datasets, ensuring that key metrics remain consistent regardless of the reporting perspective.
+
+**Live Tableau Workbook:**  
+https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis
+
+---
+
+### Landing Page
+
+The landing page serves as the central navigation hub for the Tableau workbook, allowing users to move between the four analytical dashboards through an intuitive interface.
+
+#### Purpose
+
+- Provide a single entry point for the workbook.
+- Improve navigation between dashboards.
+- Present a brief overview of the available analyses.
+- Create a more polished user experience than navigating individual worksheets.
+
+---
+
+### Executive Overview Dashboard
+
+**Primary Dataset:** `tableau_medical_claims`
+
+#### Business Objective
+
+Provide a high-level summary of behavioral health utilization, member population, and overall financial performance for executive stakeholders.
+
+#### Primary Metrics
+
+- Total validated members
+- Total medical claims
+- Total medical cost
+- Average claim cost
+- Monthly claims trend
+- Diagnosis-level spending
+- Risk score distribution
+
+#### Business Questions Answered
+
+- What is the overall size of the behavioral health population?
+- How much has been spent on behavioral health services?
+- Which diagnoses contribute the greatest share of healthcare spending?
+- How have claims changed over time?
+- Does higher clinical risk correspond to higher medical cost?
+
+#### Intended Audience
+
+- Executive leadership
+- Healthcare administrators
+- Program managers
+
+---
+
+### Population Health Dashboard
+
+**Primary Dataset:** `tableau_medical_claims`
+
+#### Business Objective
+
+Analyze utilization patterns across demographic groups, geographic regions, and clinical risk categories to better understand the behavioral health population.
+
+#### Primary Metrics
+
+- Age distribution
+- Gender distribution
+- County-level utilization
+- Diagnosis mix
+- Risk tier distribution
+- Geographic concentration of high-risk members
+
+#### Business Questions Answered
+
+- Which age groups generate the highest utilization?
+- How does utilization vary across counties?
+- Which diagnoses are most common?
+- Where are high-risk members concentrated?
+- How are members distributed across risk tiers?
+
+#### Intended Audience
+
+- Population health teams
+- Clinical leadership
+- Care management programs
+
+---
+
+### Provider Performance Dashboard
+
+**Primary Dataset:** `tableau_medical_claims`
+
+#### Business Objective
+
+Evaluate provider utilization, facility performance, and healthcare spending across different provider groups.
+
+#### Primary Metrics
+
+- Provider specialty
+- Facility type
+- Claim volume
+- Total medical cost
+- Average claim cost
+- Claim status distribution
+- Length of stay
+
+#### Business Questions Answered
+
+- Which provider specialties generate the greatest utilization?
+- How does utilization differ by facility type?
+- Which provider groups account for the highest healthcare spending?
+- Are claim outcomes consistent across provider categories?
+- Do certain specialties have longer inpatient stays?
+
+#### Intended Audience
+
+- Provider network management
+- Quality improvement teams
+- Healthcare operations
+
+---
+
+### Pharmacy Utilization & Cost Dashboard
+
+**Primary Dataset:** `tableau_pharmacy_claims`
+
+#### Business Objective
+
+Analyze psychiatric medication utilization, pharmacy spending, and prescription trends across the behavioral health population.
+
+#### Primary Metrics
+
+- Pharmacy cost
+- Drug category utilization
+- Days supply
+- Quantity dispensed
+- Monthly pharmacy trends
+- Pharmacy claim status
+- Risk tier comparisons
+
+#### Business Questions Answered
+
+- Which medication categories drive pharmacy spending?
+- How do prescription patterns change across risk tiers?
+- Which medications are prescribed most frequently?
+- How have pharmacy costs changed over time?
+- Are pharmacy claim outcomes within expected ranges?
+
+#### Intended Audience
+
+- Pharmacy leadership
+- Behavioral health administrators
+- Clinical operations
+- Population health analysts
+
+---
+
+### Dashboard Design Principles
+
+Several design principles guided the development of the Tableau workbook.
+
+#### Consistent Business Logic
+
+All calculations, feature engineering, and validation are performed within the SQL ETL pipeline rather than inside Tableau. This ensures every dashboard uses identical business definitions and eliminates inconsistencies between reports.
+
+#### Analytics-Ready Data
+
+The Tableau dashboards connect directly to denormalized analytical data marts that already contain validated member, provider, and claim attributes. This minimizes the need for calculated fields and reduces dashboard complexity.
+
+#### Performance
+
+By precomputing joins, validation logic, and derived variables during ETL, dashboard queries execute efficiently while supporting interactive filtering and drill-down analysis.
+
+#### Audience-Specific Design
+
+Rather than combining every visualization into a single dashboard, the workbook separates executive, population, provider, and pharmacy analytics into focused views tailored to the needs of different stakeholders.
+
+#### Interactive Exploration
+
+The dashboards support interactive filtering, highlighting, and drill-down capabilities, allowing users to explore utilization patterns, compare population segments, and investigate cost drivers without modifying the underlying data.
+
+### Relationship Between the ETL Pipeline and Tableau
+
+The Tableau workbook contains no data preparation logic. All validation, cleaning, feature engineering, and standardization occur within the SQL ETL pipeline before the data reaches Tableau.
+
+This separation of responsibilities allows SQL to serve as the data engineering layer while Tableau functions solely as the presentation and analytical reporting layer. The resulting architecture improves maintainability, ensures consistent business logic across all dashboards, and more closely reflects how production healthcare analytics environments are designed.
+
+## Performance Optimization
+
+Although this project was developed using synthetic behavioral health data, the ETL pipeline was designed using many of the same performance and scalability principles found in production healthcare analytics environments. Performance optimization was considered throughout the design process by reducing unnecessary processing, minimizing repeated transformations, and preparing analytics-ready datasets before they reached the reporting layer.
+
+---
+
+### Targeted Indexing
+
+Indexes were created on frequently queried columns within the cleaned analytical tables to improve filtering, joins, and aggregation performance.
+
+Indexing focused on fields commonly used for reporting, including:
+
+- Member identifiers
+- Provider identifiers
+- Claim dates
+- Diagnosis categories
+- Risk tiers
+- County
+- Provider specialty
+- Pharmacy drug category
+
+Creating indexes on these high-use columns reduces query execution time and improves dashboard responsiveness, particularly when applying interactive filters within Tableau.
+
+---
+
+### Denormalized Analytical Data Marts
+
+Rather than requiring Tableau to join multiple normalized tables, the ETL pipeline produces two denormalized analytical data marts:
+
+- `tableau_medical_claims`
+- `tableau_pharmacy_claims`
+
+Each table contains validated member, provider, enrollment, and claims information in a single analytics-ready structure.
+
+This design offers several advantages:
+
+- Eliminates expensive joins during reporting.
+- Simplifies dashboard development.
+- Reduces query complexity.
+- Improves interactive dashboard performance.
+- Ensures consistent business logic across all visualizations.
+
+---
+
+### Centralized Business Logic
+
+Business rules are implemented within the SQL ETL pipeline instead of being recreated inside Tableau.
+
+Examples include:
+
+- Enrollment window validation
+- Risk tier assignment
+- Age band generation
+- Cost tier categorization
+- Diagnosis categorization
+- County standardization
+- Pharmacy claim status normalization
+
+Centralizing business logic ensures that every dashboard, SQL query, and downstream analysis applies identical transformation rules while reducing duplicate calculations throughout the reporting environment.
+
+---
+
+### Early Data Validation
+
+Data quality validation occurs before records enter the analytical data marts.
+
+Invalid records are identified during the validation stage and written to the `rejected_records` table instead of being processed through subsequent transformations.
+
+This approach provides several performance benefits:
+
+- Reduces the volume of data processed by downstream transformations.
+- Prevents invalid records from reaching reporting tables.
+- Eliminates repeated validation checks later in the pipeline.
+- Simplifies dashboard queries by ensuring only validated records are analyzed.
+
+---
+
+### Repeatable ETL Execution
+
+The pipeline is designed to be rerunnable from start to finish without requiring manual cleanup.
+
+Each execution rebuilds the database objects, reloads the source files, reapplies validation rules, regenerates engineered features, and recreates the analytical data marts.
+
+This repeatable design supports:
+
+- Rapid development and testing
+- Consistent validation results
+- Reliable quality assurance
+- Easy regeneration of analytical datasets when source data changes
+
+---
+
+### SQL-First Reporting Architecture
+
+The project follows a SQL-first architecture in which data preparation is completed before visualization.
+
+The ETL pipeline performs:
+
+- Data ingestion
+- Validation
+- Cleaning
+- Standardization
+- Feature engineering
+- Data mart creation
+
+Tableau is responsible only for visualization and interactive analysis.
+
+By shifting data preparation from the visualization layer to the ETL pipeline, the solution minimizes dashboard calculations, improves maintainability, and allows multiple business intelligence tools to consume the same validated analytical datasets.
+
+Separating data engineering from reporting reduces dashboard complexity, centralizes business logic, and reflects the architecture commonly used in enterprise healthcare analytics environments.
+
+---
+
+### Scalability Considerations
+
+Although the synthetic datasets used in this project are relatively modest in size, the ETL architecture was designed with scalability in mind.
+
+The modular pipeline structure allows additional validation rules, engineered features, and reporting datasets to be incorporated with minimal changes to the overall workflow. Because validation, transformation, and reporting are separated into distinct stages, each component can be maintained and extended independently as data volume and reporting requirements grow.
+
+This modular design provides a strong foundation for expanding the pipeline to support larger healthcare datasets, additional claims sources, or more advanced analytical workflows in future iterations.
