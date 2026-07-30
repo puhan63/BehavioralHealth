@@ -59,7 +59,7 @@ The result is a structured, validated analytics pipeline that mirrors how health
 ### Key Questions This Project Answers:
 
 * What are the top diagnoses? How do conditions like depression, anxiety, and trauma shift across different counties and member risk tiers?
-* Are claims processing correctly? Do medical and pharmacy denial, approval, and reversal rates align with normal expectations?
+* Are claims processed correctly? Do medical and pharmacy denial, approval, and reversal rates align with normal expectations?
 * Where is the highest risk? Which specific counties and risk categories hold the highest concentration of high-cost or high-need members?
 * How do provider costs compare? How do different specialties and facilities stack up regarding claim volumes, total spending, and behavioral health focus?
 * Why are claims getting rejected? What is the main culprit behind rejections—enrollment gaps, missing provider data, or bad codes?
@@ -430,7 +430,7 @@ Provides a central navigation hub for the four analytical dashboards.
 
 🧠 Feature Engineering Logic: risk tiers, age bands, cost tiers, and diagnosis categories (documented above)
 
-📊 Interactive Tableau Dashboard Workbook: [View Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)
+📊 Interactive Tableau Dashboard Workbook: [View Interactive Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/PharmacyUtilizationCostAnalysis)
 
 ### About the Author
 
