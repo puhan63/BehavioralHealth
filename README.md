@@ -166,7 +166,7 @@ Detailed technical documentation—including the ETL architecture, validation fr
 
 The complete SQL ETL pipeline that powers this project is available here:
 
-📄 **[Behavioral_Health_ETL.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**
+📄 **[Behavioral_Health_ETL.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral_Health_ETL.sql)**
 
 The pipeline performs:
 
@@ -269,7 +269,7 @@ https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 📄 **[README.md](README.md)**                                                                                                                                                | Project overview, architecture summary, ETL results, Tableau dashboard previews, and setup instructions.                                                              |
 | 📘 **[Technical_Design.md](Technical_Design.md)**                                                                                                                            | Detailed documentation covering the ETL architecture, validation framework, SQL implementation, feature engineering, dashboard design, and performance optimization.  |
-| 🗄️ **[Behavioral Health Queries.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Queries.sql)**                                             | Complete SQL ETL pipeline including raw data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, and audit logging. |
+| 🗄️ **[Behavioral Health Queries.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral_Health_ETL.sql)**                                             | Complete SQL ETL pipeline including raw data ingestion, validation, cleaning, standardization, feature engineering, analytical data mart creation, and audit logging. |
 | 🔍 **[Behavioral Health Data Quality Analysis.sql](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Data%20Quality%20Analysis.sql)**              | Read-only SQL investigation script used to analyze validation failures, verify ETL rules, and identify root causes behind rejected records.                          |
 | 📊 **[Interactive Tableau Workbook](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau/BehavioralHealthClaimsAnalyticsDashboard?publish=yes)** | Interactive Tableau workbook containing the Executive Overview, Population Health, Provider Performance, and Pharmacy Utilization dashboards.                         |
 | 📁 **Analytical Data Marts**                                                                                                                                                 | Final analytics-ready tables: `tableau_medical_claims` and `tableau_pharmacy_claims`, designed for business intelligence reporting.                                   |
