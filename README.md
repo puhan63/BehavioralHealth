@@ -323,102 +323,56 @@ Provides a central navigation hub for the four analytical dashboards.
 
 ### Behavioral Health Executive Overview (Executive View)
 
-![Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
+![📊 Behavioral Health Executive Overview](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Executive%20Overview%20(1).png)
 
-This dashboard explores overall claim volume, cost, and member risk profile, along with diagnosis-level spend and monthly claims trends across the member population.
+		Dataset: tableau_medical_claims (5,859 validated medical claims)
 
-tableau_medical_claims
+		Focus:
 
-		 •	5,859 rows (one row per validated medical claim)
-
-			Contains:
-
-			•	Member risk score and risk tier
-            •	Diagnosis category
-			•	Claim status, place of service, length of stay
-            •	Allowed amount and cost tier
-			•	Provider specialty and domain
-			
-
-			Used for:
-
-            •	Executive KPI summary
-			•	Risk score vs. cost analysis
-            •	Diagnosis-level cost breakdown
-			•	Monthly claims trend tracking
+		- Executive KPIs (members, claims, total cost)
+		- Risk score and cost analysis
+		- Diagnosis-level spending
+		- Monthly medical claims trends
 
 ### Behavioral Health Utilization & Population Analysis
 
-![Behavioral Health Utilization & Population Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Utilization%20%26%20Population%20Analysis.png)
+![👥 Behavioral Health Utilization & Population Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Utilization%20%26%20Population%20Analysis.png)
 
-This dashboard explores diagnosis mix, risk tier, age band, and geographic variation in behavioral health utilization across counties.
+		Dataset: tableau_medical_claims (5,859 validated medical claims)
 
-tableau_medical_claims
+		Focus:
 
-		 •	5,859 rows (one row per validated medical claim)
-
-			Contains:
-
-			•	Member age, age band, gender, county
-			•	Risk score and risk tier
-			•	Diagnosis category
-			•	Service date, service year/month
-
-			Used for:
-
-			•	Population segmentation by risk and demographics
-			•	County-level utilization comparisons
-			•	Diagnosis mix trends over time
-			•	Identifying where high-risk members are concentrated
+		- Population segmentation by age, gender, and risk tier
+		- County-level utilization comparisons
+		- Diagnosis mix across the population
+		- Geographic concentration of high-risk members
 
 ### Provider Performance & Care Delivery Analysis
 
-![Provider Performance & Care Delivery Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Performance%20%26%20Care%20Delivery%20Analysis.png)
+![🏥 Provider Performance & Care Delivery Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Performance%20%26%20Care%20Delivery%20Analysis.png)
 
-This dashboard explores claim volume, cost, and utilization patterns across provider specialties, domains, and facility types.
+		Dataset: tableau_medical_claims (5,859 validated medical claims)
 
-tableau_medical_claims
+		Focus:
 
-		 •	5,859 rows (one row per validated medical claim)
-
-			Contains:
-
-			•	Provider specialty and provider domain
-			•	Facility type
-			•	Claim status and place of service
-			•	Allowed amount and cost tier
-
-			Used for:
-
-			•	Provider- and specialty-level cost comparisons
-			•	Facility type utilization analysis
-			•	Claim status patterns by provider domain
-			•	Identifying high-cost or high-volume care settings
+		- Provider specialty comparisons
+		- Facility type utilization
+		- Claim status by provider domain
+		- Cost and utilization by provider
 
 ### Pharmacy Utilization & Cost Analysis
 
-![Pharmacy Utilization & Cost Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Utilization%20%26%20Cost%20Analysis.png)
+![💊 Pharmacy Utilization & Cost Analysis](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Utilization%20%26%20Cost%20Analysis.png)
 
-This dashboard explores prescription drug utilization, cost, and days-supply patterns across drug categories and member risk tiers.
+		Dataset: tableau_pharmacy_claims (4,435 validated pharmacy claims)
 
-tableau_pharmacy_claims
+		Focus:
 
-		 •	4,435 rows (one row per validated pharmacy claim)
-
-			Contains:
-
-			•	Member risk score and risk tier
-			•	Drug name and drug category
-			•	Days supply and days-supply band
-			•	Quantity and quantity band
-			•	Claim status and cost tier
-
-			Used for:
-
-			•	Medication utilization by drug category
-			•	Cost and days-supply trend analysis
-			•	Risk tier vs. pharmacy spend comparisons
-			•	Claim status patterns in pharmacy data
+		- Medication utilization by drug category
+		- Pharmacy cost trends
+		- Days supply and quantity analysis
+		- Risk tier versus pharmacy utilization
+		- Pharmacy claim status patterns
 
 ### Key Findings (High-Level Insights)
 
