@@ -317,8 +317,7 @@ This project includes a multi-dashboard Tableau workbook consisting of a landing
 
 ### Dashboard Navigation:
 
-🏠 Landing Page
-(https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
+![🏠 Landing Page](https://github.com/puhan63/BehavioralHealth/blob/main/Behavioral%20Health%20Claims%20Analytics%20Dashboard.png)
 
 Provides a central navigation hub for the four analytical dashboards.
 
