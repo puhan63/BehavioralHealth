@@ -16,7 +16,7 @@ Using 35,000 synthetic medical and pharmacy claims, I explored three questions:
 
 I used Python and SQL to investigate data quality issues, correct inconsistencies, and prepare the datasets for analysis. I then used Tableau Public to create three interactive dashboards.
 
-**[View the Tableau Dashboards](https://public.tableau.com/views/BehavioralHealthTableau2/BehavioralHealthClaimsAnalytics?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link**
+**[View the Tableau Dashboards](https://public.tableau.com/views/BehavioralHealthTableau2/BehavioralHealthClaimsAnalytics?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
 All data used in this project is synthetic. No real patient information is included.
 
