@@ -236,4 +236,4 @@ Potential next steps include adding a final before-and-after validation summary,
 - [README](README.md) – Project overview and key findings
 - [SQL ETL Pipeline](Behavioral_Health_ETL.sql) – Data cleaning, validation, and reporting tables
 - [Data Quality Analysis](Behavioral_Health_Data_Quality_Analysis.sql) – SQL queries used to investigate data quality issues
-- Python Correction Script – Used to correct issues in the synthetic source data
+- [Python Date Correction Script](python_behavioral_health.py) – Corrects inconsistent enrollment and claim dates in the synthetic datasets while preserving the original files and documenting changes
