@@ -94,9 +94,9 @@ This dashboard explores:
 
 **Key finding:** Risk score had a very weak positive relationship with medical claims volume (R² = 0.0052). Risk score alone explained very little of the variation in utilization in this dataset.
 
-![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+![Member Risk Dashboard](https://github.com/puhan63/BehavioralHealth/blob/main/Member%20Risk%20%26%20Medical%20Claims%20Utilization.png)
 
-[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+[View Interactive Member Risk Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau2/PharmacyClaimsUtilizationCostAnalysis?publish=yes)
 
 #### Dashboard 2: Provider Specialty & Medical Claims Utilization
 
