@@ -74,7 +74,7 @@ The final analytical datasets were organized into two tables:
 
 - tableau_pharmacy_claims
 
-More details about the cleaning process, validation rules, and SQL logic are available in Technical_Design.md.
+More details about the cleaning process, validation rules, and SQL logic are available in [Technical Design documentation](Technical_Design.md).
 
 ### Tableau Dashboards
 
