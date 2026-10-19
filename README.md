@@ -160,8 +160,8 @@ Project Files
 |------|-------------|
 | `README.md` | Project overview and key findings |
 | `Technical_Design.md` | Data preparation, validation rules, and SQL documentation |
-| Python correction script | Corrects issues in the synthetic source data before SQL processing |
-| `Behavioral_Health_ETL.sql` | SQL data cleaning, validation, and reporting pipeline |
+| python_behavioral_health.py | Corrects issues in the synthetic source data before SQL processing |
+| `Behavioral_Health_Updated_ETL.sql` | SQL data cleaning, validation, and reporting pipeline |
 | `Behavioral_Health_Data_Quality_Analysis.sql` | SQL queries used to investigate data quality issues |
 | Tableau dashboards | Three interactive dashboards covering member risk, provider specialty, and pharmacy claims |
 
