@@ -94,6 +94,10 @@ This dashboard explores:
 
 **Key finding:** Risk score had a very weak positive relationship with medical claims volume (R² = 0.0052). Risk score alone explained very little of the variation in utilization in this dataset.
 
+![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+
+[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+
 #### Dashboard 2: Provider Specialty & Medical Claims Utilization
 
 **Question:** How do medical claims utilization and costs differ across provider specialties?
@@ -115,6 +119,10 @@ This dashboard compares:
 - Endocrinology had the highest average paid allowed amount per claim ($3,328.89).
 
 - The relationship between provider workload and average paid claim cost was very weak (R² = 0.03).
+
+![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+
+[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
 
 #### Dashboard 3: Pharmacy Claims Utilization & Cost Analysis
 
@@ -141,6 +149,10 @@ This dashboard includes:
 - Average paid drug costs were fairly similar across the main drug categories, ranging from approximately $43.46 to $44.87 per claim.
 
 These findings describe patterns in synthetic data and should not be interpreted as real-world clinical or prescribing trends.
+
+![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+
+[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
 
 #### What I Learned
 
