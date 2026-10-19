@@ -231,4 +231,9 @@ Potential next steps include adding a final before-and-after validation summary,
 
 ---
 
-**Related files:** [README](README.md) · `Behavioral_Health_ETL.sql` · `Behavioral_Health_Data_Quality_Analysis.sql` · Python correction script (use its actual filename once uploaded)
+**Related files:** 
+
+- [README](README.md) – Project overview and key findings
+- [SQL ETL Pipeline](Behavioral_Health_ETL.sql) – Data cleaning, validation, and reporting tables
+- [Data Quality Analysis](Behavioral_Health_Data_Quality_Analysis.sql) – SQL queries used to investigate data quality issues
+- Python Correction Script – Used to correct issues in the synthetic source data
