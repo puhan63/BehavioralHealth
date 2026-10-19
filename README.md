@@ -1,6 +1,6 @@
-Behavioral Health Claims Utilization & Risk Analytics
+# Behavioral Health Claims Utilization & Risk Analytics
 
-Python | SQL | MySQL | Tableau | Healthcare Data Analytics
+## Python | SQL | MySQL | Tableau | Healthcare Data Analytics
 
 Project Overview
 
