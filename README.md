@@ -152,7 +152,7 @@ These findings describe patterns in synthetic data and should not be interpreted
 
 ![Pharmacy Claims Dashboard](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Claims%20Utilization%20%26%20Cost%20Analysis.png)
 
-[View Interactive Pharmacy Claims Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+[View Interactive Pharmacy Claims Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau2/PharmacyClaimsUtilizationCostAnalysis?publish=yes)
 
 #### What I Learned
 
