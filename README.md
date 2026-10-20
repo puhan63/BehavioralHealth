@@ -150,9 +150,9 @@ This dashboard includes:
 
 These findings describe patterns in synthetic data and should not be interpreted as real-world clinical or prescribing trends.
 
-![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+![Pharmacy Claims Dashboard](https://github.com/puhan63/BehavioralHealth/blob/main/Pharmacy%20Claims%20Utilization%20%26%20Cost%20Analysis.png)
 
-[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+[View Interactive Pharmacy Claims Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
 
 #### What I Learned
 
