@@ -122,7 +122,7 @@ This dashboard compares:
 
 ![Provider Specialty Dashboard](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Specialty%20%26%20Medical%20Claims%20Utilization.png)
 
-[View Interactive Provider Specialty Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+[View Interactive Provider Specialty Dashboard](https://public.tableau.com/app/profile/patricia.uhan/viz/BehavioralHealthTableau2/PharmacyClaimsUtilizationCostAnalysis?publish=yes)
 
 #### Dashboard 3: Pharmacy Claims Utilization & Cost Analysis
 
