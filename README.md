@@ -120,9 +120,9 @@ This dashboard compares:
 
 - The relationship between provider workload and average paid claim cost was very weak (R² = 0.03).
 
-![Member Risk Dashboard](dashboards/member_risk_dashboard.png)
+![Provider Specialty Dashboard](https://github.com/puhan63/BehavioralHealth/blob/main/Provider%20Specialty%20%26%20Medical%20Claims%20Utilization.png)
 
-[View Interactive Member Risk Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
+[View Interactive Provider Specialty Dashboard](PASTE_TABLEAU_DASHBOARD_1_URL_HERE)
 
 #### Dashboard 3: Pharmacy Claims Utilization & Cost Analysis
 
