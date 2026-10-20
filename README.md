@@ -177,5 +177,12 @@ Project Files
 | `Behavioral_Health_Data_Quality_Analysis_Updated.sql` | SQL queries used to investigate data quality issues |
 | Tableau dashboards | Three interactive dashboards covering member risk, provider specialty, and pharmacy claims |
 
+#### About Me
+
+I'm a mental health therapist transitioning into healthcare data analytics. My clinical background has given me experience working with healthcare information, tracking outcomes, and using data to understand patterns over time.
+
+I've been developing my skills in SQL, Python, Excel, and Tableau, with a particular interest in healthcare data quality and analysis.
+
+I'm looking for opportunities where I can combine my healthcare experience with technical skills to help organizations better understand and use their data.
 
 📫 Let's connect: LinkedIn: https://www.linkedin.com/in/patricia-uhan · Email: uhanpatricia@gmail.com · GitHub: https://github.com/puhan63
